@@ -1,0 +1,103 @@
+taldovrat
+
+File Description:
+MyFileScript.java - The manager of the program. Runs the main method that makes
+all other parts of the program run.
+Parser.java - Responsible for reading the Command file.
+Section.java - A Class that represents the section inside the command file 
+given by the user. This class holds a Filter and an Order that filters and
+orders the given dir.
+SectionFactory.java - Responsible for creating the sections one by one. has a 
+nested class TempSection - a class that is a intermediate step in the section
+creating process.
+FilterAll.java - implements Filter, accepts all files.
+FilterBetween.java - implements Filter, accepts all files between the two
+given double values.
+FilterGreater.java - implements Filter, accepts all files greater than the
+given double value.
+FilterSmaller.java - implements Filter, accepts all files smaller than the
+given double value.
+FilterContains.java - implements Filter, accepts all files the contains the
+given String value.
+FilterPrefix.java - implements Filter, accepts all files that start with 
+the given value.
+FilterSuffix.java - implements Filter, accepts all files that end with 
+the given value. 
+FilterFile.java - implements Filter, accepts all files that their name 
+matches the given String value.
+FilterExecutable.java - implements Filter, accepts all files that are 
+executable.
+FilterHidden.java - implements Filter, accepts all files that are 
+hidden.
+FilterWritable.java - implements Filter, accepts all files that are 
+writable.
+FilterNot.java - implements Filter, accepts all files that are opposite to
+the given filter value.
+FilterFactory.java - Responsible for creating all Filters.
+Filter.java - extends FileFilter, A father object for all filter classes.
+OrderAbs.java - implements Order, orders all files by their absolute value.
+OrderType.java - implements Order, orders all files by their file type.
+OrderSize.java - implements Order, orders all files by their file size.
+OrderReverse.java - implements Order, orders all files in the opposite order 
+of the given order value.
+OrderFactory.java - Responsible for creating the orders according to the 
+command file.
+Order.java - an interface, a father object for all order classes. 
+BadCommandFileException.java - extends Exception, thrown if there is a problem
+with the structure of the command file.
+TypeOneException.java - Extends Exception, thrown if there is a problem with 
+the names of the orders or filters.
+README - this file.
+
+1. Design - In general, the design is based on what was told in class - A 
+manager class that runs the program, a Parser class for reading the command 
+file and check if its general structure is ok, Section class for saving the 
+filters and orders, and Filter and Order father classes that has subfilters and
+suborders. While implementing the program, i tried to make sure that every 
+class has its own "responsibilty", and that other classes doesn't do actions 
+that can be in other classes fields. For example, i defined the Parser class as
+a class that is responsible for reading the command file and check if its
+structure is ok, and made sure that all filter and order creation was happening 
+under the filter and order classes through the Filter and Order factory 
+classes.
+
+2. Implementation issues - the biggest implementation issue i had is the
+FilterNot and OrderReverse classes. it took me some time figuring out how to 
+implement these classes without bloating the number of classes i had. I started
+out by creating a class for each reverse and not class, but than i thought 
+about creating just one main class that calls the opposite of the other 
+classes. These classes are the reason i created static methods that could be
+called from the Not and Reverse classes without a reference to a specific 
+instance, that would return exactly what the accept and compare methods would
+return.
+
+3. Exceptions - I created two types of Exceptions classes that would "catch"
+the different errors that i was supposed to handle according to the exercise
+instructions. Other than creating these two classes for the special cases of
+this specific exercise, i used the built in java exceptions for the different
+methods i used during the writing of the code. The special exceptions were - 
+Type two exceptions - Bad command file exception, and type one exception - 
+a bad filter of order name. I divided the errors in two - the First, Bad 
+command file exception was to be thrown at the first part of the program, 
+while reading the command file and building its structure and before creating
+the actual sections. if there was an error with the file, the exception was 
+thrown and the program was terminated without printing any filtered files.
+The second excetion was to be thrown while creating the sections. Everytime a
+section was created, while creating the filter and order of that specific
+section, if the names weren't correct, an exception was thrown (with the
+correct warning message) and the bad order or filter was created again, this
+time with the default name. The program would continue to work until it 
+finishes all the sections, generating warning messages for every section.
+
+4. Data structures - I used two different data structures in this program:
+a. ArrayList - for creating data structures without a defined length in advance
+and with the ability to add a value one by one.
+b Array - The Arrays class has a built in sort method that sorts the given 
+array according to a given comparator object. with implementing the comparator 
+class through the Order classes, i was able to use this method and it saved 
+me the "pleasure" of implementing a sorting algorithm from scratch. Moreover,
+the array that was ordered by this sort method was created from the listFiles
+built in java method that is a part of the Collections class. this class takes
+a FileFilter object and filters the directory according to that filter. By 
+implementing the necessary methods - accept and compare - i was able to use
+the benefits of the built in efficient java methods.   
